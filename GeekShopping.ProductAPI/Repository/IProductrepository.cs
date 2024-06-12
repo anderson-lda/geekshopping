@@ -2,7 +2,7 @@
 
 namespace GeekShopping.ProductAPI.Repository
 {
-    public interface IProductrepository
+    public interface IProductRepository
     {
         Task<IEnumerable<ProductVO>> FindAll();
 
