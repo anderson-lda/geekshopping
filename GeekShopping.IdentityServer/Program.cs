@@ -21,6 +21,7 @@ var builderServices = builder.Services.AddIdentityServer(options =>
     options.EmitStaticAudienceClaim = true;
 }).AddInMemoryIdentityResources(IdentityConfiguration.IdentityResources)
 .AddInMemoryClients(IdentityConfiguration.Clients)
+.AddInMemoryApiScopes(IdentityConfiguration.ApiScopes)
 .AddAspNetIdentity<ApplicationUser>();
 
 builderServices.AddDeveloperSigningCredential();
@@ -35,6 +36,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
 }
+app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
