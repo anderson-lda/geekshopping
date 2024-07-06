@@ -7,8 +7,8 @@ namespace GeekShopping.CartAPI.Repository
         Task<CartVO> FindCartByUserId(string userId);
         Task<CartVO> SaveOrUpdateCart(CartVO cart);
         Task<bool> RemoveFromCart(long cartDetailsId);
-        Task<bool> ApplyCupom(string userId, string couponCode);
-        Task<bool> RemoveCupom(string userId);
+        Task<bool> ApplyCoupon(string userId, string couponCode);
+        Task<bool> RemoveCoupon(string userId);
         Task<bool> ClearCart(string userId);
     }
 }
