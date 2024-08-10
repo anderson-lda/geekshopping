@@ -2,6 +2,7 @@ using GeekShopping.CartAPI.Data.ValueObjects;
 using GeekShopping.CartAPI.Messages;
 using GeekShopping.CartAPI.RabbitMQSender;
 using GeekShopping.CartAPI.Repository;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GeekShopping.CartAPI.Controllers
@@ -61,7 +62,7 @@ namespace GeekShopping.CartAPI.Controllers
         [HttpPost("checkout")]
         public async Task<ActionResult<CheckoutHeaderVO>> Checkout(CheckoutHeaderVO vo)
         {
-            string token = Request.Headers["Authorization"];
+            string token = await HttpContext.GetTokenAsync("access_token");
             if(vo?.UserId == null) return BadRequest();
 
             var cart = await _cartRepository.FindCartByUserId(vo.UserId);
