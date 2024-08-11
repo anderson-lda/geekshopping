@@ -1,21 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using GeekShopping.OrderAPI.Model.Context;
 using Microsoft.IdentityModel.Tokens;
-using GeekShopping.OrderAPI.Repository;
-using GeekShopping.OrderAPI.MessageConsumer;
-using GeekShopping.OrderAPI.RabbitMQSender;
+using GeekShopping.PaymentAPI.MessageConsumer;
+using GeekShopping.PaymentProcessor;
+using GeekShopping.PaymentAPI.RabbitMQSender;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
-builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 5))));
+//var connection = builder.Configuration["MySQLConnection:MySQLConnectionString"];
+//builder.Services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 5))));
 
-var build = new DbContextOptionsBuilder<MySQLContext>();
-build.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 5)));
-builder.Services.AddSingleton(new OrderRepository(build.Options));
-builder.Services.AddHostedService<RabbitMQCheckoutConsumer>();
+//var build = new DbContextOptionsBuilder<MySQLContext>();
+//build.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 5)));
+builder.Services.AddSingleton<IProcessPayment, ProcessPayment>();
 builder.Services.AddHostedService<RabbitMQPaymentConsumer>();
 builder.Services.AddSingleton<IRabbitMQMessageSender, RabbitMQMessageSender>();
 builder.Services.AddControllers();
@@ -42,8 +40,8 @@ builder.Services.AddAuthorization(op =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.OrderAPI", Version = "v1" });
-    //c.EnableAnnotations(); não há nenhum controller
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "GeekShopping.PaymentAPI", Version = "v1" });
+    //c.EnableAnnotations(); não há controllers
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = @"Enter 'Bearer' [space] and your token!",
